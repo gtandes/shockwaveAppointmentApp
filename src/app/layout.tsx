@@ -6,6 +6,8 @@ import { ModalContextProvider } from '@/context/ModalContext';
 import { cn } from '@/lib/utils';
 
 import '@/styles/globals.css';
+import { NewApptBtnContextProvider } from '@/context/NewApptBtnContext';
+import { CalendarContextProvider } from '@/context/CalendarContext';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -19,7 +21,11 @@ export default function RootLayout({
 			<body className='flex flex-col items-center justify-center min-h-screen antialiased'>
 				<LeftSideNavContextProvider>
 					<RightSidebarContextProvider>
-						<ModalContextProvider>{children}</ModalContextProvider>
+						<ModalContextProvider>
+							<NewApptBtnContextProvider>
+								<CalendarContextProvider>{children}</CalendarContextProvider>
+							</NewApptBtnContextProvider>
+						</ModalContextProvider>
 					</RightSidebarContextProvider>
 				</LeftSideNavContextProvider>
 			</body>

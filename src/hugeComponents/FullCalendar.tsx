@@ -5,7 +5,6 @@ import {
 	DateSelectArg,
 	EventClickArg,
 	EventContentArg,
-	formatDate,
 } from '@fullcalendar/core';
 
 import FullCalendar from '@fullcalendar/react';
@@ -13,11 +12,15 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { INITIAL_EVENTS, businessHours, createEventId } from '@/lib/utils';
+import {
+	dayHeaderClassNames,
+	slotLaneClassNames,
+} from '@/styles/fullCalendarStyles';
 
 interface CalendarHookProps {}
 
 const CalendarHook: FC<CalendarHookProps> = ({}) => {
-	const [weekendsVisible, setweekendsVisible] = useState<boolean>(false);
+	const [weekendsVisible, setweekendsVisible] = useState<boolean>(true);
 	const [currentEvents, setcurrentEvents] = useState<EventApi[]>([]);
 
 	// const RenderSidebar: FC = () => {
@@ -118,23 +121,39 @@ const CalendarHook: FC<CalendarHookProps> = ({}) => {
 					}}
 					initialView='timeGridDay'
 					editable={true}
-					nowIndicator={true}
 					selectable={true}
 					selectMirror={true}
 					dayMaxEvents={true}
 					weekends={weekendsVisible}
+					showNonCurrentDates={false}
 					initialEvents={INITIAL_EVENTS}
 					select={handleDateSelect}
 					eventContent={renderEventContent}
 					eventClick={handleEventClick}
 					eventsSet={handleEvents}
-					eventBackgroundColor='#9747ff'
+					eventBackgroundColor='#f5edff'
 					eventBorderColor='#9747ff'
 					eventTextColor='#1c1c1e'
+					// eventDisplay=''
 					// eventAdd={function () {}}
 					// eventChange={function () {}}
 					// eventRemove={function () {}}
+					timeZone='local'
 					businessHours={businessHours}
+					slotMinTime={'08:00:00'}
+					slotMaxTime={'18:00:00'}
+					slotLabelFormat={{
+						hour: 'numeric',
+						minute: '2-digit',
+						omitZeroMinute: false,
+					}}
+					slotDuration={'00:15:00'}
+					// slotLabelClassNames={'h-[99px]'}
+					slotLaneClassNames={slotLaneClassNames}
+					dayHeaderClassNames={dayHeaderClassNames}
+					// dayCellClassNames={'h-[99px]'}
+					navLinks={true}
+					nowIndicator={true}
 				/>
 			</div>
 		</div>

@@ -5,6 +5,7 @@ import { FC, useContext, useState } from 'react';
 import dayjs from 'dayjs';
 import { generateDate, months } from '@/lib/calendar';
 import Image from 'next/image';
+import { CalendarContext } from '@/context/CalendarContext';
 
 interface CalendarProps {}
 
@@ -13,6 +14,12 @@ const Calendar: FC<CalendarProps> = ({}) => {
 	const currentDate = dayjs();
 	const [today, setToday] = useState(currentDate);
 	const [selectDate, setSelectDate] = useState(currentDate);
+	const { handleisCalendarClicked } = useContext(CalendarContext);
+
+	const openFullCalendar = () => {
+		handleOpenModal();
+		handleisCalendarClicked();
+	};
 
 	return (
 		<div className='flex flex-col items-start justify-start gap-[0.75rem] text-left text-[1rem] text-darkgray font-urbanist'>
@@ -21,7 +28,7 @@ const Calendar: FC<CalendarProps> = ({}) => {
 			<div className='flex flex-row items-center w-[220px] justify-between gap-[0.75rem] text-[1.5rem] text-gray-gray-100'>
 				<b
 					className='cursor-pointer relative tracking-[0.02em]'
-					onClick={handleOpenModal}>
+					onClick={openFullCalendar}>
 					{months[today.month()]}
 				</b>
 

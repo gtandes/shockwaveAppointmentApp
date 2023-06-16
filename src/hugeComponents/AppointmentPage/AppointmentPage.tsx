@@ -15,6 +15,10 @@ import { modalStyle } from '@/lib/muiStyles';
 import { Box, Modal } from '@mui/material';
 import { ModalContext } from '@/context/ModalContext';
 import CalendarHook from '../FullCalendar';
+import TailwindCalendar from '../TailwindCalendar';
+import { NewApptBtnContext } from '@/context/NewApptBtnContext';
+import { CalendarContext } from '@/context/CalendarContext';
+import RegForm from '../RegForm';
 
 interface AppointmentPageProps {}
 
@@ -22,6 +26,17 @@ const AppointmentPage: FC<AppointmentPageProps> = ({}) => {
 	const { toggleFold, unFold } = useContext(LeftSideNavContext);
 	const { isRightSideBarOpen } = useContext(RightSideBarContext);
 	const { openModal, handleCloseModal } = useContext(ModalContext);
+	const { isNewApptBtnClicked, handleCloseNewAppt } =
+		useContext(NewApptBtnContext);
+
+	const { isCalendarClicked, handleCloseCalendar } =
+		useContext(CalendarContext);
+
+	const onClose = () => {
+		handleCloseModal();
+		handleCloseNewAppt();
+		handleCloseCalendar();
+	};
 
 	return (
 		<div className='relative bg-white w-full h-[67.5rem] overflow-hidden text-left text-[1rem] text-gray-gray-100 font-urbanist'>
@@ -78,11 +93,14 @@ const AppointmentPage: FC<AppointmentPageProps> = ({}) => {
 					<Modal
 						sx={{ backdropFilter: 'blur(3px)' }}
 						open={openModal}
-						onClose={handleCloseModal}
+						onClose={onClose}
 						aria-labelledby='calendar-modal-title'
 						aria-describedby='calendar-modal-description'>
-						{/* <TailwindCalendar /> */}
-						<CalendarHook />
+						<>
+							{/* {isNewApptBtnClicked && <TailwindCalendar />} */}
+							{isNewApptBtnClicked && <RegForm />}
+							{isCalendarClicked && <CalendarHook />}
+						</>
 					</Modal>
 				</Box>
 			)}

@@ -6,7 +6,7 @@ type openModal = boolean;
 type setOpenModal = React.Dispatch<React.SetStateAction<openModal>>;
 
 export type ModalContextProps = {
-	handleCloseModal: () => setOpenModal | void;
+	handleCloseModal: () => void;
 	handleOpenModal: () => setOpenModal | void;
 	openModal: openModal;
 };
