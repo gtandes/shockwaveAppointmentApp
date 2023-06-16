@@ -63,9 +63,9 @@ const HomePage = () => {
 				'Appointment date is ' +
 					date +
 					' starting at ' +
-					time.toUTCString +
+					time +
 					' and ending at ' +
-					endTime.toUTCString,
+					endTime,
 			);
 			toast.success('User Saved!');
 		}

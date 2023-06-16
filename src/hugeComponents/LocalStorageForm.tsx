@@ -1,8 +1,6 @@
 'use client';
 
 import React, { FC, useState, useEffect } from 'react';
-import { Icon } from 'react-icons-kit';
-import { trash } from 'react-icons-kit/feather/trash';
 
 // getting the values of local storage
 const getDatafromLS = () => {
