@@ -2,6 +2,7 @@
 
 import { LeftSideNavContext } from '@/context/LeftSidebarContext';
 import { RightSideBarContext } from '@/context/RightSidebarContext';
+import Image from 'next/image';
 import { FC, useContext } from 'react';
 
 interface VaxxState3Props {}
@@ -28,8 +29,10 @@ const VaxxState3: FC<VaxxState3Props> = ({}) => {
 			<div className='flex flex-row items-start justify-between flex-1'>
 				<div className='flex flex-row items-start justify-start gap-[0.75rem]'>
 					<div className='rounded-17xl [background:linear-gradient(rgba(255,_255,_255,_0.8),_rgba(255,_255,_255,_0.8)),_#ff9447] w-[2.25rem] h-[2.25rem] flex flex-row p-[0.63rem] box-border items-center justify-center'>
-						<img
-							className='relative w-[1.25rem] h-[1.25rem] overflow-hidden shrink-0'
+						<Image
+							width={20}
+							height={20}
+							className='relative overflow-hidden shrink-0'
 							alt=''
 							src='/ic-parkoutlineinjection.svg'
 						/>
@@ -44,19 +47,25 @@ const VaxxState3: FC<VaxxState3Props> = ({}) => {
 							</div>
 						</div>
 						<div className='flex flex-row items-center justify-start gap-[0.5rem] text-[0.75rem]'>
-							<img
-								className='relative w-[1rem] h-[1rem] overflow-hidden shrink-0'
+							<Image
+								width={16}
+								height={16}
+								className='relative overflow-hidden shrink-0'
 								alt=''
 								src='/ic-user1.svg'
 							/>
+
 							<div className='relative tracking-[0.02em] font-medium'>
 								John Doe
 							</div>
 						</div>
 					</div>
 				</div>
-				<img
-					className='relative w-[1.25rem] h-[1.25rem] overflow-hidden shrink-0'
+
+				<Image
+					width={20}
+					height={20}
+					className='relative overflow-hidden shrink-0'
 					alt=''
 					src='/ic-dotsvertical.svg'
 				/>

@@ -8,6 +8,9 @@ import { cn } from '@/lib/utils';
 import '@/styles/globals.css';
 import { NewApptBtnContextProvider } from '@/context/NewApptBtnContext';
 import { CalendarContextProvider } from '@/context/CalendarContext';
+import { FormContextProvider } from '@/context/FormContext';
+import { ToastContainer } from 'react-toastify';
+import { AppointmentsContextProvider } from '@/context/EditCancelContext';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -19,15 +22,32 @@ export default function RootLayout({
 	return (
 		<html lang='en' className={(cn('bg-white antialiased'), inter.className)}>
 			<body className='flex flex-col items-center justify-center min-h-screen antialiased'>
-				<LeftSideNavContextProvider>
-					<RightSidebarContextProvider>
-						<ModalContextProvider>
+				<ModalContextProvider>
+					<LeftSideNavContextProvider>
+						<RightSidebarContextProvider>
 							<NewApptBtnContextProvider>
-								<CalendarContextProvider>{children}</CalendarContextProvider>
+								<CalendarContextProvider>
+									<FormContextProvider>
+										<AppointmentsContextProvider>
+											<ToastContainer
+												position='top-center'
+												autoClose={2000}
+												hideProgressBar={false}
+												newestOnTop={false}
+												closeOnClick
+												rtl={false}
+												pauseOnFocusLoss
+												draggable
+												pauseOnHover
+											/>
+											{children}
+										</AppointmentsContextProvider>
+									</FormContextProvider>
+								</CalendarContextProvider>
 							</NewApptBtnContextProvider>
-						</ModalContextProvider>
-					</RightSidebarContextProvider>
-				</LeftSideNavContextProvider>
+						</RightSidebarContextProvider>
+					</LeftSideNavContextProvider>
+				</ModalContextProvider>
 			</body>
 		</html>
 	);

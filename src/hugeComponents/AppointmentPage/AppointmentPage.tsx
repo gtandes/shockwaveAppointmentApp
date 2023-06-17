@@ -15,10 +15,11 @@ import { modalStyle } from '@/lib/muiStyles';
 import { Box, Modal } from '@mui/material';
 import { ModalContext } from '@/context/ModalContext';
 import CalendarHook from '../FullCalendar';
-import TailwindCalendar from '../TailwindCalendar';
 import { NewApptBtnContext } from '@/context/NewApptBtnContext';
 import { CalendarContext } from '@/context/CalendarContext';
 import RegForm from '../RegForm';
+import { AppointmentsContext } from '@/context/EditCancelContext';
+import EditCancelApptForm from '../EditCancelApptForm';
 
 interface AppointmentPageProps {}
 
@@ -32,10 +33,14 @@ const AppointmentPage: FC<AppointmentPageProps> = ({}) => {
 	const { isCalendarClicked, handleCloseCalendar } =
 		useContext(CalendarContext);
 
+	const { openAppointments, handleCloseAppointments } =
+		useContext(AppointmentsContext);
+
 	const onClose = () => {
 		handleCloseModal();
 		handleCloseNewAppt();
 		handleCloseCalendar();
+		handleCloseAppointments();
 	};
 
 	return (
@@ -97,9 +102,9 @@ const AppointmentPage: FC<AppointmentPageProps> = ({}) => {
 						aria-labelledby='calendar-modal-title'
 						aria-describedby='calendar-modal-description'>
 						<>
-							{/* {isNewApptBtnClicked && <TailwindCalendar />} */}
 							{isNewApptBtnClicked && <RegForm />}
 							{isCalendarClicked && <CalendarHook />}
+							{openAppointments && <EditCancelApptForm />}
 						</>
 					</Modal>
 				</Box>
