@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { FC } from 'react';
 
 interface ContactInfoProps {}
@@ -11,8 +12,10 @@ const ContactInfo: FC<ContactInfoProps> = ({}) => {
 			<div className='self-stretch flex flex-col items-start justify-start gap-[1.25rem] text-[1rem]'>
 				<div className='flex flex-row items-start justify-start gap-[1.25rem]'>
 					<div className='flex flex-row items-start justify-start gap-[0.5rem]'>
-						<img
-							className='relative w-[1.25rem] h-[1.25rem] overflow-hidden shrink-0'
+						<Image
+							width={20}
+							height={20}
+							className='relative overflow-hidden shrink-0'
 							alt=''
 							src='/ic-messages.svg'
 						/>
@@ -26,8 +29,10 @@ const ContactInfo: FC<ContactInfoProps> = ({}) => {
 				</div>
 				<div className='flex flex-row items-start justify-start gap-[1.25rem]'>
 					<div className='flex flex-row items-start justify-start gap-[0.5rem]'>
-						<img
-							className='relative w-[1.25rem] h-[1.25rem] overflow-hidden shrink-0'
+						<Image
+							width={20}
+							height={20}
+							className='relative overflow-hidden shrink-0'
 							alt=''
 							src='/ic-phone.svg'
 						/>
@@ -41,8 +46,10 @@ const ContactInfo: FC<ContactInfoProps> = ({}) => {
 				</div>
 				<div className='flex flex-row items-start justify-start gap-[1.25rem]'>
 					<div className='flex flex-row items-start justify-start gap-[0.5rem]'>
-						<img
-							className='relative w-[1.25rem] h-[1.25rem] overflow-hidden shrink-0'
+						<Image
+							width={20}
+							height={20}
+							className='relative overflow-hidden shrink-0'
 							alt=''
 							src='/ic-pin.svg'
 						/>

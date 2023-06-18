@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { FC } from 'react';
 
 interface PetDetailsProps {}
@@ -9,8 +10,10 @@ const PetDetails: FC<PetDetailsProps> = ({}) => {
 				PET DETAILS
 			</div>
 			<div className='flex flex-row items-center justify-start gap-[1.5rem] text-gray-gray-100'>
-				<img
-					className='relative rounded-81xl w-[3.25rem] h-[3.25rem] overflow-hidden shrink-0 object-cover'
+				<Image
+					width={52}
+					height={52}
+					className='relative object-cover overflow-hidden rounded-81xl shrink-0'
 					alt=''
 					src='/frame-132@2x.png'
 				/>
@@ -24,8 +27,10 @@ const PetDetails: FC<PetDetailsProps> = ({}) => {
 			<div className='flex flex-col items-start justify-start gap-[1.25rem]'>
 				<div className='flex flex-row items-start justify-start gap-[1.25rem]'>
 					<div className='flex flex-row items-start justify-start gap-[0.5rem]'>
-						<img
-							className='relative w-[1.25rem] h-[1.25rem] overflow-hidden shrink-0'
+						<Image
+							width={20}
+							height={20}
+							className='relative overflow-hidden shrink-0'
 							alt=''
 							src='/ic-breed.svg'
 						/>
@@ -39,8 +44,10 @@ const PetDetails: FC<PetDetailsProps> = ({}) => {
 				</div>
 				<div className='flex flex-row items-start justify-start gap-[1.25rem]'>
 					<div className='flex flex-row items-start justify-start gap-[0.5rem]'>
-						<img
-							className='relative w-[1.25rem] h-[1.25rem] overflow-hidden shrink-0'
+						<Image
+							width={20}
+							height={20}
+							className='relative overflow-hidden shrink-0'
 							alt=''
 							src='/ic-sex.svg'
 						/>
@@ -54,8 +61,10 @@ const PetDetails: FC<PetDetailsProps> = ({}) => {
 				</div>
 				<div className='flex flex-row items-start justify-start gap-[1.25rem]'>
 					<div className='flex flex-row items-start justify-start gap-[0.5rem]'>
-						<img
-							className='relative w-[1.25rem] h-[1.25rem] overflow-hidden shrink-0'
+						<Image
+							width={20}
+							height={20}
+							className='relative overflow-hidden shrink-0'
 							alt=''
 							src='/ic-age.svg'
 						/>
@@ -69,8 +78,10 @@ const PetDetails: FC<PetDetailsProps> = ({}) => {
 				</div>
 				<div className='flex flex-row items-start justify-start gap-[1.25rem]'>
 					<div className='flex flex-row items-start justify-start gap-[0.5rem]'>
-						<img
-							className='relative w-[1.25rem] h-[1.25rem] overflow-hidden shrink-0'
+						<Image
+							width={20}
+							height={20}
+							className='relative overflow-hidden shrink-0'
 							alt=''
 							src='/ic-calendar.svg'
 						/>

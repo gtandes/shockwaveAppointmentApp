@@ -1,6 +1,8 @@
 'use client';
 
+import { supabase } from '@/api/createClient';
 import { AppointmentsContext } from '@/context/EditCancelContext';
+import { FormContext } from '@/context/FormContext';
 import { ModalContext } from '@/context/ModalContext';
 import { FC, useContext } from 'react';
 
@@ -9,9 +11,22 @@ interface CancelApptBtnProps {}
 const CancelApptBtn: FC<CancelApptBtnProps> = ({}) => {
 	const { handleOpenAppointments } = useContext(AppointmentsContext);
 	const { handleOpenModal } = useContext(ModalContext);
+	const { setallAppointments } = useContext(FormContext);
+
+	const fetchApptDetails = async () => {
+		const { data } = await supabase
+			.from('ShockwaveApptFormDetails')
+			.select('*');
+
+		setallAppointments(data);
+
+		console.log(data);
+	};
+
 	const handleClick = () => {
 		handleOpenModal();
 		handleOpenAppointments();
+		fetchApptDetails();
 	};
 
 	return (

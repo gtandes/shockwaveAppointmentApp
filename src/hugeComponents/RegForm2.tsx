@@ -1,25 +1,24 @@
 'use client';
 
-import { FormContext } from '@/context/FormContext';
-import React, { useContext } from 'react';
-import { toast } from 'react-toastify';
-import VetCards from './VetCards';
+import { FC, useContext } from 'react';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import { toast } from 'react-toastify';
+
+import { FormContext } from '@/context/FormContext';
 import { ModalContext } from '@/context/ModalContext';
 import { NewApptBtnContext } from '@/context/NewApptBtnContext';
 import { CalendarContext } from '@/context/CalendarContext';
 import { AppointmentsContext } from '@/context/EditCancelContext';
+import VetCards from './VetCards';
+import { supabase } from '@/api/createClient';
 
-const HomePage = () => {
+interface RegForm2Props {}
+
+const RegForm2: FC<RegForm2Props> = ({}) => {
 	const { handleCloseModal } = useContext(ModalContext);
-	const { isNewApptBtnClicked, handleCloseNewAppt } =
-		useContext(NewApptBtnContext);
-
-	const { isCalendarClicked, handleCloseCalendar } =
-		useContext(CalendarContext);
-
-	const { openAppointments, handleCloseAppointments } =
-		useContext(AppointmentsContext);
+	const { handleCloseNewAppt } = useContext(NewApptBtnContext);
+	const { handleCloseCalendar } = useContext(CalendarContext);
+	const { handleCloseAppointments } = useContext(AppointmentsContext);
 
 	const onClose = () => {
 		handleCloseModal();
@@ -48,12 +47,25 @@ const HomePage = () => {
 		service,
 		setService,
 		img,
-		allData,
-		setAllData,
+		allAppointments,
+		setallAppointments,
+		individualApptDetails,
+		setindividualApptDetails,
+		vetDetails,
 	} = useContext(FormContext);
 
+	const fetchApptDetails = async () => {
+		const { data } = await supabase
+			.from('ShockwaveApptFormDetails')
+			.select('*');
+
+		setallAppointments(data);
+
+		console.log(data);
+	};
+
 	//convert img
-	const getBase64 = (file) => {
+	const getBase64 = (file: Blob) => {
 		return new Promise((resolve, reject) => {
 			const reader = new FileReader();
 			reader.onload = () => resolve(reader.result);
@@ -63,7 +75,7 @@ const HomePage = () => {
 	};
 
 	//handle img
-	const handleImg = (e) => {
+	const handleImg = (e: any) => {
 		const file = e.target.files[0];
 		getBase64(file).then((base64) => {
 			localStorage['img'] = base64;
@@ -72,7 +84,7 @@ const HomePage = () => {
 	};
 
 	//form submit handler
-	const handleSubmit = (e) => {
+	const handleSubmit = (e: { preventDefault: () => void }) => {
 		e.preventDefault();
 
 		if (name === '') {
@@ -82,45 +94,61 @@ const HomePage = () => {
 		} else if (petName === '') {
 			toast.error('Pet Name is Required');
 		} else {
-			localStorage.setItem('name', name);
-			localStorage.setItem('petName', petName);
-			localStorage.setItem('breed', breed);
-			localStorage.setItem('age', age);
-			localStorage.setItem('gender', gender);
-			localStorage.setItem('date', date);
-			localStorage.setItem('time', time);
-			localStorage.setItem('endTime', endTime);
-			localStorage.setItem('service', service);
-			// localStorage.setItem('img', img);
-
-			setAllData((prevData) => [
-				...prevData,
-				name,
-				petName,
-				breed,
-				age,
-				gender,
-				date,
-				time,
-				endTime,
-				service,
+			setindividualApptDetails((prevData: any) => [
+				{
+					...prevData,
+					name: name,
+					petName: petName,
+					breed: breed,
+					age: age,
+					gender: gender,
+					date: date,
+					time: time,
+					endTime: endTime,
+					service: service,
+				},
 			]);
 
-			console.log(
-				'Appointment date is ' +
-					date +
-					' starting at ' +
-					time +
-					' and ending at ' +
-					endTime,
-			);
+			setallAppointments(individualApptDetails);
+
+			// console.log(
+			// 	'Appointment date is ' +
+			// 		date +
+			// 		' starting at ' +
+			// 		time +
+			// 		' and ending at ' +
+			// 		endTime,
+			// );
+
+			createSupabaseAppt();
 
 			console.log('====================================');
-			console.log(allData);
+			console.log(individualApptDetails);
 			console.log('====================================');
-
+			console.log(allAppointments);
 			toast.success('Appointment Booked!');
 		}
+	};
+
+	const createSupabaseAppt = async () => {
+		const { error } = await supabase.from('ShockwaveApptFormDetails').insert({
+			name: name,
+			petName: petName,
+			breed: breed,
+			age: age,
+			gender: gender,
+			date: date,
+			time: time,
+			endTime: endTime,
+			service: service,
+			vetDetails: vetDetails,
+		});
+
+		fetchApptDetails();
+
+		console.log('====================================');
+		console.log(error);
+		console.log('====================================');
 	};
 
 	return (
@@ -131,7 +159,9 @@ const HomePage = () => {
 					<div className='h-full w-[300px] px-5'>
 						{/* owner name */}
 						<div className='mb-4 w-[200px]'>
-							<label className='block mb-2 font-bold text-gray-700' for='name'>
+							<label
+								className='block mb-2 font-bold text-gray-700'
+								htmlFor='name'>
 								Owner Name
 							</label>
 							<input
@@ -149,7 +179,7 @@ const HomePage = () => {
 						<div className='mb-4 w-[200px]'>
 							<label
 								className='block mb-2 font-bold text-gray-700'
-								for='petName'>
+								htmlFor='petName'>
 								Pet Name
 							</label>
 							<input
@@ -168,7 +198,7 @@ const HomePage = () => {
 							<div className='mb-4 w-[120px]'>
 								<label
 									className='block mb-2 font-bold text-gray-700'
-									for='breed'>
+									htmlFor='breed'>
 									Breed
 								</label>
 								<input
@@ -183,28 +213,30 @@ const HomePage = () => {
 							</div>
 
 							<div className='mb-4 w-[30px]'>
-								<label className='block mb-2 font-bold text-gray-700' for='age'>
+								<label
+									className='block mb-2 font-bold text-gray-700'
+									htmlFor='age'>
 									Age
 								</label>
 								<input
 									className='w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
 									id='age'
-									type='text'
+									type='number'
 									onChange={(e) => setage(e.target.value)}
 								/>
 							</div>
 						</div>
 
 						{/* gender */}
-						<div class='border rounded-md py-4 w-full mx-auto max-w-2xl'>
+						<div className='w-full max-w-2xl py-4 mx-auto border rounded-md'>
 							<label
 								className='block mb-2 font-bold text-gray-700'
-								for='gender'>
+								htmlFor='gender'>
 								Gender
 							</label>
 
 							<div className='flex w-[250px]'>
-								<label class='w-[100px] flex bg-gray-100 text-gray-700 rounded-md hover:bg-indigo-300 cursor-pointer '>
+								<label className='w-[100px] flex bg-gray-100 text-gray-700 rounded-md hover:bg-indigo-300 cursor-pointer '>
 									<input
 										type='radio'
 										id='gender'
@@ -212,10 +244,10 @@ const HomePage = () => {
 										value='Male'
 										onChange={(e) => setgender(e.target.value)}
 									/>
-									<p class='pl-2'>Male</p>
+									<p className='pl-2'>Male</p>
 								</label>
 
-								<label class='w-[100px] flex bg-gray-100 text-gray-700 rounded-md hover:bg-indigo-300 cursor-pointer '>
+								<label className='w-[100px] flex bg-gray-100 text-gray-700 rounded-md hover:bg-indigo-300 cursor-pointer '>
 									<input
 										type='radio'
 										id='gender'
@@ -223,14 +255,16 @@ const HomePage = () => {
 										value='Female'
 										onChange={(e) => setgender(e.target.value)}
 									/>
-									<p class='pl-2'>Female</p>
+									<p className='pl-2'>Female</p>
 								</label>
 							</div>
 						</div>
 
 						{/* date picker */}
 						<div className='mb-4 w-[200px]'>
-							<label className='block mb-2 font-bold text-gray-700' for='date'>
+							<label
+								className='block mb-2 font-bold text-gray-700'
+								htmlFor='date'>
 								Date
 							</label>
 							<input
@@ -238,7 +272,6 @@ const HomePage = () => {
 								id='date'
 								type='date'
 								onChange={(e) => setdate(e.target.value)}
-								min={new Date()}
 								placeholder='Select a date'
 								required
 							/>
@@ -246,7 +279,9 @@ const HomePage = () => {
 
 						{/* start time picker */}
 						<div className='mb-4 w-[200px]'>
-							<label className='block mb-2 font-bold text-gray-700' for='time'>
+							<label
+								className='block mb-2 font-bold text-gray-700'
+								htmlFor='time'>
 								Start Time
 							</label>
 							<input
@@ -263,7 +298,9 @@ const HomePage = () => {
 						</div>
 						{/* end time picker */}
 						<div className='mb-4 w-[200px]'>
-							<label className='block mb-2 font-bold text-gray-700' for='time'>
+							<label
+								className='block mb-2 font-bold text-gray-700'
+								htmlFor='time'>
 								End Time
 							</label>
 							<input
@@ -291,7 +328,7 @@ const HomePage = () => {
 						<div className='mb-4 w-[200px]'>
 							<label
 								className='block mb-2 font-bold text-gray-700'
-								for='service'>
+								htmlFor='service'>
 								Select a Service
 							</label>
 
@@ -301,7 +338,7 @@ const HomePage = () => {
 								id='service'
 								name='service'
 								required>
-								<option value='Meeting'>Consultation</option>
+								<option value='Consultation'>Consultation</option>
 								<option value='Vaccination'>Vaccination</option>
 								<option value='Surgery'>Surgery</option>
 								<option value='Euthanization'>Euthanization</option>
@@ -315,7 +352,7 @@ const HomePage = () => {
 									<div className='pt-4 mb-6'>
 										<label
 											className='block mb-2 font-bold text-gray-700'
-											for='service'>
+											htmlFor='service'>
 											Upload a photo of your pet
 										</label>
 
@@ -328,7 +365,7 @@ const HomePage = () => {
 												onChange={handleImg}
 											/>
 											<label
-												for='file'
+												htmlFor='file'
 												className='relative flex min-h-[200px] items-center justify-center rounded-md border border-dashed border-[#e0e0e0] p-12 text-center'>
 												<div>
 													<span className='block mb-2 text-xl font-semibold text-lorem-text'>
@@ -369,4 +406,4 @@ const HomePage = () => {
 	);
 };
 
-export default HomePage;
+export default RegForm2;

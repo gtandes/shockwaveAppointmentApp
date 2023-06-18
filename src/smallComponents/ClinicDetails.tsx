@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { FC } from 'react';
 
 interface ClinicDetailsProps {}
@@ -9,8 +10,10 @@ const ClinicDetails: FC<ClinicDetailsProps> = ({}) => {
 				CLINIC DETAILS
 			</div>
 			<div className='flex flex-row items-center justify-start gap-[1.5rem] text-gray-gray-100'>
-				<img
-					className='relative rounded-81xl w-[3.25rem] h-[3.25rem] overflow-hidden shrink-0 object-cover'
+				<Image
+					width={52}
+					height={52}
+					className='relative rounded-81xl w-[3.25rem] h-[3.25rem]overflow-hidden shrink-0 object-cover'
 					alt=''
 					src='/frame-131@2x.png'
 				/>
@@ -24,8 +27,10 @@ const ClinicDetails: FC<ClinicDetailsProps> = ({}) => {
 			<div className='self-stretch flex flex-col items-start justify-start gap-[1.25rem]'>
 				<div className='flex flex-row items-start justify-start gap-[1.25rem]'>
 					<div className='flex flex-row items-start justify-start gap-[0.5rem]'>
-						<img
-							className='relative w-[1.25rem] h-[1.25rem] overflow-hidden shrink-0'
+						<Image
+							width={20}
+							height={20}
+							className='relative overflow-hidden shrink-0'
 							alt=''
 							src='/ic-messages.svg'
 						/>
@@ -39,8 +44,10 @@ const ClinicDetails: FC<ClinicDetailsProps> = ({}) => {
 				</div>
 				<div className='flex flex-row items-start justify-start gap-[1.25rem]'>
 					<div className='flex flex-row items-start justify-start gap-[0.5rem]'>
-						<img
-							className='relative w-[1.25rem] h-[1.25rem] overflow-hidden shrink-0'
+						<Image
+							width={20}
+							height={20}
+							className='relative overflow-hidden shrink-0'
 							alt=''
 							src='/ic-phone.svg'
 						/>
@@ -54,8 +61,10 @@ const ClinicDetails: FC<ClinicDetailsProps> = ({}) => {
 				</div>
 				<div className='flex flex-row items-start justify-start gap-[1.25rem]'>
 					<div className='flex flex-row items-start justify-start gap-[0.5rem]'>
-						<img
-							className='relative w-[1.25rem] h-[1.25rem] overflow-hidden shrink-0'
+						<Image
+							width={20}
+							height={20}
+							className='relative overflow-hidden shrink-0'
 							alt=''
 							src='/ic-pin.svg'
 						/>

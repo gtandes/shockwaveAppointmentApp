@@ -17,8 +17,8 @@ import { ModalContext } from '@/context/ModalContext';
 import CalendarHook from '../FullCalendar';
 import { NewApptBtnContext } from '@/context/NewApptBtnContext';
 import { CalendarContext } from '@/context/CalendarContext';
-import RegForm from '../RegForm';
 import { AppointmentsContext } from '@/context/EditCancelContext';
+import RegForm2 from '../RegForm2';
 import EditCancelApptForm from '../EditCancelApptForm';
 
 interface AppointmentPageProps {}
@@ -102,7 +102,7 @@ const AppointmentPage: FC<AppointmentPageProps> = ({}) => {
 						aria-labelledby='calendar-modal-title'
 						aria-describedby='calendar-modal-description'>
 						<>
-							{isNewApptBtnClicked && <RegForm />}
+							{isNewApptBtnClicked && <RegForm2 />}
 							{isCalendarClicked && <CalendarHook />}
 							{openAppointments && <EditCancelApptForm />}
 						</>

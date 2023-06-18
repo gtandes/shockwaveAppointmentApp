@@ -22,8 +22,8 @@ import React, { createContext, useState } from 'react';
 // type setService = React.Dispatch<React.SetStateAction<service>>;
 // type img = string;
 // type setimg = React.Dispatch<React.SetStateAction<img>>;
-// type allData = Array<string>;
-// type setAllData = React.Dispatch<React.SetStateAction<allData>>;
+// type appointmentData = Array<string>;
+// type setappointmentData = React.Dispatch<React.SetStateAction<appointmentData>>;
 
 // export type FormContextProps = {
 // 	name: name;
@@ -46,8 +46,8 @@ import React, { createContext, useState } from 'react';
 // 	setService: setService;
 // 	img: img;
 // 	setimg: setimg;
-// 	allData: allData;
-// 	setAllData: setAllData;
+// 	appointmentData: appointmentData;
+// 	setappointmentData: setappointmentData;
 // };
 
 export const FormContext = createContext();
@@ -66,9 +66,22 @@ export const FormContextProvider = ({ children }) => {
 	const [time, settime] = useState('');
 	const [endTime, setendTime] = useState('');
 	const [service, setService] = useState('');
-	const [veterinarian, setVeterinarian] = useState({});
+	const [veterinarian, setVeterinarian] = useState('');
+	const [vetDetails, setvetDetails] = useState({});
 	const [img, setimg] = useState();
-	const [allData, setAllData] = useState([]);
+	const [allAppointments, setallAppointments] = useState([]);
+	const [individualApptDetails, setindividualApptDetails] = useState({
+		name: '',
+		petName: '',
+		breed: '',
+		age: '',
+		gender: '',
+		date: '',
+		time: '',
+		endTime: '',
+		service: '',
+		vetDetails: {},
+	});
 
 	return (
 		<FormContext.Provider
@@ -95,8 +108,12 @@ export const FormContextProvider = ({ children }) => {
 				setimg,
 				veterinarian,
 				setVeterinarian,
-				allData,
-				setAllData,
+				vetDetails,
+				setvetDetails,
+				allAppointments,
+				setallAppointments,
+				individualApptDetails,
+				setindividualApptDetails,
 			}}>
 			{children}
 		</FormContext.Provider>
