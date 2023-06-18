@@ -1,5 +1,6 @@
 'use client';
 
+import { ApptType } from '@/smallComponents/ScheduledApptArray';
 import React, { createContext, useState } from 'react';
 
 type openAppointments = boolean;
@@ -11,6 +12,10 @@ export type AppointmentsContextProps = {
 	handleCloseAppointments: () => void;
 	handleOpenAppointments: () => setOpenAppointments | void;
 	openAppointments: openAppointments;
+	idOfExistingApptToEdit: ApptType['id'];
+	setidOfExistingApptToEdit: React.Dispatch<
+		React.SetStateAction<ApptType['id']>
+	>;
 };
 
 export const AppointmentsContext = createContext<AppointmentsContextProps>(
@@ -24,6 +29,8 @@ type AppointmentsContextProviderProps = {
 export const AppointmentsContextProvider = ({
 	children,
 }: AppointmentsContextProviderProps) => {
+	const [idOfExistingApptToEdit, setidOfExistingApptToEdit] =
+		useState<ApptType['id']>();
 	const [openAppointments, setOpenAppointments] = useState(false);
 	const handleOpenAppointments = () => setOpenAppointments(true);
 	const handleCloseAppointments = () => setOpenAppointments(false);
@@ -31,6 +38,8 @@ export const AppointmentsContextProvider = ({
 	return (
 		<AppointmentsContext.Provider
 			value={{
+				idOfExistingApptToEdit,
+				setidOfExistingApptToEdit,
 				handleOpenAppointments,
 				handleCloseAppointments,
 				openAppointments,

@@ -1,26 +1,99 @@
 'use client';
 
-import { FC, useContext } from 'react';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import { toast } from 'react-toastify';
-
+import { FC, useContext, useState } from 'react';
 import { FormContext } from '@/context/FormContext';
+import VetCards from './VetCards';
+import { AppointmentsContext } from '@/context/EditCancelContext';
+import { ApptType } from '@/smallComponents/ScheduledApptArray';
+import { toast } from 'react-toastify';
+import { supabase } from '@/api/createClient';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { ModalContext } from '@/context/ModalContext';
 import { NewApptBtnContext } from '@/context/NewApptBtnContext';
 import { CalendarContext } from '@/context/CalendarContext';
-import { AppointmentsContext } from '@/context/EditCancelContext';
-import VetCards from './VetCards';
-import { supabase } from '@/api/createClient';
 import { ReschedModalContext } from '@/context/ReschedFormModalContext';
+import { EditFormContext } from '@/context/EditFormContext';
 
-interface RegForm2Props {}
+interface ReschedFormProps {}
 
-const RegForm2: FC<RegForm2Props> = ({}) => {
+const ReschedForm: FC<ReschedFormProps> = ({}) => {
+	const {
+		name,
+		// setname,
+		petName,
+		// setpetName,
+		breed,
+		// setbreed,
+		age,
+		// setage,
+		gender,
+		// setgender,
+		date,
+		// setdate,
+		time,
+		// settime,
+		endTime,
+		// setendTime,
+		service,
+		// setService,
+		allAppointments,
+		setallAppointments,
+		vetDetails,
+	} = useContext(FormContext);
+
+	const {
+		editName,
+		seteditName,
+		editPetName,
+		seteditPetName,
+		editBreed,
+		seteditBreed,
+		editAge,
+		seteditAge,
+		editGender,
+		seteditGender,
+		editDate,
+		seteditDate,
+		editTime,
+		seteditTime,
+		editEndTime,
+		seteditEndTime,
+		editService,
+		seteditService,
+		editVetDetails,
+		seteditVetDetails,
+	} = useContext(EditFormContext);
+
 	const { handleCloseModal } = useContext(ModalContext);
 	const { handleCloseNewAppt } = useContext(NewApptBtnContext);
 	const { handleCloseCalendar } = useContext(CalendarContext);
-	const { handleCloseAppointments } = useContext(AppointmentsContext);
+	const { idOfExistingApptToEdit, handleCloseAppointments } =
+		useContext(AppointmentsContext);
+
 	const { closeReschedModal } = useContext(ReschedModalContext);
+
+	const handleSubmit = () => {
+		if (name === '') {
+			toast.error('Name Is Required');
+		} else if (breed === '') {
+			toast.error('Breed Is Required');
+		} else if (petName === '') {
+			toast.error('Pet Name is Required');
+		} else {
+			console.log(
+				'Appointment date is ' +
+					editDate +
+					' starting at ' +
+					editTime +
+					' and ending at ' +
+					editEndTime,
+			);
+
+			updateSupabaseAppt();
+
+			toast.success('Appointment Booked!');
+		}
+	};
 
 	const onClose = () => {
 		handleCloseModal();
@@ -28,43 +101,6 @@ const RegForm2: FC<RegForm2Props> = ({}) => {
 		handleCloseCalendar();
 		handleCloseAppointments();
 		closeReschedModal();
-	};
-
-	const {
-		name,
-		setname,
-		petName,
-		setpetName,
-		breed,
-		setbreed,
-		age,
-		setage,
-		gender,
-		setgender,
-		date,
-		setdate,
-		time,
-		settime,
-		endTime,
-		setendTime,
-		service,
-		setService,
-		img,
-		allAppointments,
-		setallAppointments,
-		individualApptDetails,
-		setindividualApptDetails,
-		vetDetails,
-	} = useContext(FormContext);
-
-	const fetchApptDetails = async () => {
-		const { data } = await supabase
-			.from('ShockwaveApptFormDetails')
-			.select('*');
-
-		setallAppointments(data);
-
-		console.log(data);
 	};
 
 	//convert img
@@ -85,63 +121,22 @@ const RegForm2: FC<RegForm2Props> = ({}) => {
 		});
 	};
 
-	const handleSubmit = () => {
-		if (name === '') {
-			toast.error('Name Is Required');
-		} else if (breed === '') {
-			toast.error('Breed Is Required');
-		} else if (petName === '') {
-			toast.error('Pet Name is Required');
-		} else {
-			// setindividualApptDetails((prevData: any) => [
-			// 	{
-			// 		...prevData,
-			// 		name: name,
-			// 		petName: petName,
-			// 		breed: breed,
-			// 		age: age,
-			// 		gender: gender,
-			// 		date: date,
-			// 		time: time,
-			// 		endTime: endTime,
-			// 		service: service,
-			// 	},
-			// ]);
-
-			// setallAppointments(individualApptDetails);
-
-			console.log(
-				'Appointment date is ' +
-					date +
-					' starting at ' +
-					time +
-					' and ending at ' +
-					endTime,
-			);
-
-			createSupabaseAppt();
-
-			// console.log('====================================');
-			// console.log(individualApptDetails);
-			// console.log('====================================');
-			// console.log(allAppointments);
-			toast.success('Appointment Booked!');
-		}
-	};
-
-	const createSupabaseAppt = async () => {
-		const { error } = await supabase.from('ShockwaveApptFormDetails').insert({
-			name: name,
-			petName: petName,
-			breed: breed,
-			age: age,
-			gender: gender,
-			date: date,
-			time: time,
-			endTime: endTime,
-			service: service,
-			vetDetails: vetDetails,
-		});
+	const updateSupabaseAppt = async () => {
+		const { error } = await supabase
+			.from('ShockwaveApptFormDetails')
+			.update({
+				name: editName,
+				petName: editPetName,
+				breed: editBreed,
+				age: editAge,
+				gender: editGender,
+				date: editDate,
+				time: editTime,
+				endTime: editEndTime,
+				service: editService,
+				vetDetails: editVetDetails,
+			})
+			.eq('id', idOfExistingApptToEdit);
 
 		fetchApptDetails();
 
@@ -150,9 +145,25 @@ const RegForm2: FC<RegForm2Props> = ({}) => {
 		console.log('====================================');
 	};
 
+	const fetchApptDetails = async () => {
+		const { data } = await supabase
+			.from('ShockwaveApptFormDetails')
+			.select('*');
+
+		setallAppointments(data);
+
+		console.log(data);
+	};
+
+	const apptToEdit = allAppointments.filter(
+		(appt: ApptType) => appt.id === idOfExistingApptToEdit,
+	);
+
 	return (
 		<div className='flex items-center justify-center h-screen'>
 			<div className='w-[1200px] overflow-hidden bg-white rounded-lg shadow-lg font-urbanist py-6'>
+				<h1 className='flex items-center justify-center'>EDIT APPOINTMENT</h1>
+
 				<form className='flex px-6 py-4' action='' method='POST'>
 					{/* 1st column */}
 					<div className='h-full w-[300px] px-5'>
@@ -167,8 +178,9 @@ const RegForm2: FC<RegForm2Props> = ({}) => {
 								className='w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
 								id='name'
 								type='text'
-								onChange={(e) => setname(e.target.value)}
+								onChange={(e) => seteditName(e.target.value)}
 								placeholder='Enter your name'
+								value={apptToEdit[0].name}
 								aria-describedby='name'
 								required
 							/>
@@ -185,8 +197,9 @@ const RegForm2: FC<RegForm2Props> = ({}) => {
 								className='w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
 								id='petName'
 								type='text'
-								onChange={(e) => setpetName(e.target.value)}
+								onChange={(e) => seteditPetName(e.target.value)}
 								placeholder={`Enter your pet's name`}
+								defaultValue={apptToEdit[0].petName}
 								aria-describedby='petName'
 								required
 							/>
@@ -204,8 +217,9 @@ const RegForm2: FC<RegForm2Props> = ({}) => {
 									className='w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
 									id='breed'
 									type='text'
-									onChange={(e) => setbreed(e.target.value)}
+									onChange={(e) => seteditBreed(e.target.value)}
 									placeholder={`Pet's breed`}
+									defaultValue={apptToEdit[0].breed}
 									aria-describedby='petBreed'
 									required
 								/>
@@ -221,7 +235,8 @@ const RegForm2: FC<RegForm2Props> = ({}) => {
 									className='w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
 									id='age'
 									type='number'
-									onChange={(e) => setage(e.target.value)}
+									defaultValue={apptToEdit[0].age}
+									onChange={(e) => seteditAge(e.target.value)}
 								/>
 							</div>
 						</div>
@@ -241,7 +256,8 @@ const RegForm2: FC<RegForm2Props> = ({}) => {
 										id='gender'
 										name='gender'
 										value='Male'
-										onChange={(e) => setgender(e.target.value)}
+										checked={apptToEdit[0].gender == 'Male'}
+										onChange={(e) => seteditGender(e.target.value)}
 									/>
 									<p className='pl-2'>Male</p>
 								</label>
@@ -252,7 +268,8 @@ const RegForm2: FC<RegForm2Props> = ({}) => {
 										id='gender'
 										name='gender'
 										value='Female'
-										onChange={(e) => setgender(e.target.value)}
+										checked={apptToEdit[0].gender == 'Female'}
+										onChange={(e) => seteditGender(e.target.value)}
 									/>
 									<p className='pl-2'>Female</p>
 								</label>
@@ -270,8 +287,9 @@ const RegForm2: FC<RegForm2Props> = ({}) => {
 								className='w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
 								id='date'
 								type='date'
-								onChange={(e) => setdate(e.target.value)}
+								onChange={(e) => seteditDate(e.target.value)}
 								placeholder='Select a date'
+								defaultValue={apptToEdit[0].date}
 								required
 							/>
 						</div>
@@ -287,8 +305,9 @@ const RegForm2: FC<RegForm2Props> = ({}) => {
 								className='w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
 								id='time'
 								type='time'
-								onChange={(e) => settime(e.target.value)}
+								onChange={(e) => seteditTime(e.target.value)}
 								placeholder='Select a start time'
+								defaultValue={apptToEdit[0].time}
 								min='09:00:00'
 								max='18:00:00'
 								// step='900'
@@ -306,11 +325,12 @@ const RegForm2: FC<RegForm2Props> = ({}) => {
 								className='w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
 								id='endTime'
 								type='time'
-								onChange={(e) => setendTime(e.target.value)}
+								onChange={(e) => seteditEndTime(e.target.value)}
 								placeholder='Select an end time'
+								defaultValue={apptToEdit[0].endTime}
 								min='09:00:00'
 								max='18:00:00'
-								step='900'
+								// step='900'
 								required
 							/>
 						</div>
@@ -332,10 +352,11 @@ const RegForm2: FC<RegForm2Props> = ({}) => {
 							</label>
 
 							<select
-								onChange={(e) => setService(e.target.value)}
+								onChange={(e) => seteditService(e.target.value)}
 								className='cursor-pointer bg-white w-[200px] px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline'
 								id='service'
 								name='service'
+								value={apptToEdit[0].service}
 								required>
 								<option value='' disabled>
 									Choices:
@@ -397,15 +418,14 @@ const RegForm2: FC<RegForm2Props> = ({}) => {
 							</div>
 						</button>
 					</div>
-
-					<HighlightOffIcon
-						sx={{ m: -1, width: 30, height: 30, cursor: 'pointer' }}
-						onClick={onClose}
-					/>
 				</form>
 			</div>
+			<HighlightOffIcon
+				sx={{ m: -5, width: 30, height: 30, cursor: 'pointer' }}
+				onClick={onClose}
+			/>
 		</div>
 	);
 };
 
-export default RegForm2;
+export default ReschedForm;

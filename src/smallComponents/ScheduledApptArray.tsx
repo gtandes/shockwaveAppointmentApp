@@ -15,8 +15,10 @@ import {
 import { Button, Menu, MenuItem } from '@mui/material';
 import { FormContext } from '@/context/FormContext';
 import { supabase } from '@/api/createClient';
+import { AppointmentsContext } from '@/context/EditCancelContext';
+import { ReschedModalContext } from '@/context/ReschedFormModalContext';
 
-interface ApptType {
+export interface ApptType {
 	id: Key | null | undefined;
 	petName:
 		| string
@@ -80,21 +82,21 @@ interface ApptType {
 		| undefined;
 }
 
-interface ScheduledApptArrayProps {}
+interface ScheduledApptArrayProps {
+	onClose: () => void;
+}
 
-const ScheduledApptArray: FC<ScheduledApptArrayProps> = ({}) => {
+const ScheduledApptArray: FC<ScheduledApptArrayProps> = ({ onClose }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const { allAppointments, setallAppointments } = useContext(FormContext);
-	const open = Boolean(anchorEl);
+	const { idOfExistingApptToEdit, setidOfExistingApptToEdit } =
+		useContext(AppointmentsContext);
+	const { openReschedModal } = useContext(ReschedModalContext);
 
-	// const handleDelete = (index) => {
-	// 	allData.splice(index, 1);
-	// 	setAllData([...allData]);
-	// };
+	const open = Boolean(anchorEl);
 
 	const handleClose = () => {
 		setAnchorEl(null);
-		// deleteAppt();
 	};
 
 	const handleClick = (event: { currentTarget: any }) => {
@@ -149,30 +151,11 @@ const ScheduledApptArray: FC<ScheduledApptArrayProps> = ({}) => {
 							<div className='flex flex-col items-start justify-start gap-[0.75rem]'>
 								<div className='flex flex-col items-start justify-start gap-[0.5rem]'>
 									<b className='relative tracking-[0.02em]'>
-										{/* {localStorage.getItem('petName')
-									? localStorage.getItem('petName')
-									: 'NA'}
-								’s{' '}
-
-								{localStorage.getItem('service')
-									? localStorage.getItem('service')
-									: 'NA'} */}
 										{appt.petName}
 										{`'s `} {appt.service}
 									</b>
 
 									<div className='relative text-[0.75rem] tracking-[0.02em] font-medium'>
-										{/* {localStorage.getItem('date')
-									? localStorage.getItem('date')
-									: 'NA'}{' '}
-								at{' '}
-								{localStorage.getItem('time')
-									? localStorage.getItem('time')
-									: 'NA'}
-								-{' '}
-								{localStorage.getItem('endTime')
-									? localStorage.getItem('endTime')
-									: 'NA'} */}
 										{appt.date} at {appt.time} until {appt.endTime}
 									</div>
 								</div>
@@ -186,13 +169,6 @@ const ScheduledApptArray: FC<ScheduledApptArrayProps> = ({}) => {
 									/>
 
 									<div className='relative tracking-[0.02em] font-medium'>
-										{/* {localStorage.getItem('name')
-									? localStorage.getItem('name')
-									: 'NA'}
-								,
-								{localStorage.getItem('veterinarian')
-									? localStorage.getItem('veterinarian')
-									: 'NA'} */}
 										{appt.name}
 									</div>
 								</div>
@@ -221,7 +197,17 @@ const ScheduledApptArray: FC<ScheduledApptArrayProps> = ({}) => {
 							MenuListProps={{
 								'aria-labelledby': 'basic-button',
 							}}>
-							<MenuItem onClick={handleClose}>Edit</MenuItem>
+							<MenuItem
+								onClick={() => {
+									onClose();
+									setidOfExistingApptToEdit(appt.id);
+									handleClose();
+									openReschedModal();
+									// console.log(appt.id, idOfExistingApptToEdit);
+								}}>
+								Edit
+							</MenuItem>
+
 							<MenuItem
 								onClick={() => {
 									handleClose();

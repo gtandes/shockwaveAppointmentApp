@@ -20,6 +20,8 @@ import { CalendarContext } from '@/context/CalendarContext';
 import { AppointmentsContext } from '@/context/EditCancelContext';
 import RegForm2 from '../RegForm2';
 import EditCancelApptForm from '../EditCancelApptForm';
+import ReschedForm from '../ReschedForm';
+import { ReschedModalContext } from '@/context/ReschedFormModalContext';
 
 interface AppointmentPageProps {}
 
@@ -36,11 +38,15 @@ const AppointmentPage: FC<AppointmentPageProps> = ({}) => {
 	const { openAppointments, handleCloseAppointments } =
 		useContext(AppointmentsContext);
 
+	const { isReschedModalOpen, closeReschedModal } =
+		useContext(ReschedModalContext);
+
 	const onClose = () => {
 		handleCloseModal();
 		handleCloseNewAppt();
 		handleCloseCalendar();
 		handleCloseAppointments();
+		closeReschedModal();
 	};
 
 	return (
@@ -103,6 +109,7 @@ const AppointmentPage: FC<AppointmentPageProps> = ({}) => {
 						aria-describedby='calendar-modal-description'>
 						<>
 							{isNewApptBtnClicked && <RegForm2 />}
+							{isReschedModalOpen && <ReschedForm />}
 							{isCalendarClicked && <CalendarHook />}
 							{openAppointments && <EditCancelApptForm />}
 						</>

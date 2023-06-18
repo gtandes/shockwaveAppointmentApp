@@ -13,6 +13,8 @@ import { CalendarContextProvider } from '@/context/CalendarContext';
 import { FormContextProvider } from '@/context/FormContext';
 import { ToastContainer } from 'react-toastify';
 import { AppointmentsContextProvider } from '@/context/EditCancelContext';
+import { ReschedModalContextProvider } from '@/context/ReschedFormModalContext';
+import { EditFormContextProvider } from '@/context/EditFormContext';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -30,20 +32,24 @@ export default function RootLayout({
 							<NewApptBtnContextProvider>
 								<CalendarContextProvider>
 									<FormContextProvider>
-										<AppointmentsContextProvider>
-											<ToastContainer
-												position='top-center'
-												autoClose={2000}
-												hideProgressBar={false}
-												newestOnTop={false}
-												closeOnClick
-												rtl={false}
-												pauseOnFocusLoss
-												draggable
-												pauseOnHover
-											/>
-											{children}
-										</AppointmentsContextProvider>
+										<EditFormContextProvider>
+											<AppointmentsContextProvider>
+												<ReschedModalContextProvider>
+													<ToastContainer
+														position='top-center'
+														autoClose={2000}
+														hideProgressBar={false}
+														newestOnTop={false}
+														closeOnClick
+														rtl={false}
+														pauseOnFocusLoss
+														draggable
+														pauseOnHover
+													/>
+													{children}
+												</ReschedModalContextProvider>
+											</AppointmentsContextProvider>
+										</EditFormContextProvider>
 									</FormContextProvider>
 								</CalendarContextProvider>
 							</NewApptBtnContextProvider>
