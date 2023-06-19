@@ -126,6 +126,7 @@ const RegForm2: FC<RegForm2Props> = ({}) => {
 			// console.log('====================================');
 			// console.log(allAppointments);
 			toast.success('Appointment Booked!');
+			onClose();
 		}
 	};
 

@@ -60,17 +60,26 @@ interface VetCardsProps {}
 const VetCards: FC<VetCardsProps> = ({}) => {
 	const { setvetDetails } = useContext(FormContext);
 
-	const vetCardArray = vetdData.map((vet) => {
+	const vetCardArray = vetdData.map((vet, index) => {
 		return (
 			<div
 				key={vet.veterinary_name}
 				onClick={() => {
 					setvetDetails(vet);
 				}}
-				className={`mb-5 cursor-pointer rounded-xl [background:linear-gradient(rgba(255,_255,_255,_0.9),_rgba(255,_255,_255,_0.9)),_#ff9447] box-border w-[30rem] flex flex-row p-[1.25rem] items-center text-left text-[1rem] text-gray-gray-100 font-urbanist border-[1px] border-solid border-coral`}>
+				className={`mb-5 cursor-pointer rounded-xl  box-border w-[30rem] flex flex-row p-[1.25rem] items-center text-left text-[1rem] text-gray-gray-100 font-urbanist border-[1px] border-solid ${
+					index % 2 == 0
+						? 'border-blueviolet [background:linear-gradient(rgba(255,_255,_255,_0.8),_rgba(255,_255,_255,_0.8)),_#9747ff]'
+						: 'border-coral [background:linear-gradient(rgba(255,_255,_255,_0.9),_rgba(255,_255,_255,_0.9)),_#ff9447]'
+				}`}>
 				<div className='flex flex-row items-start justify-between flex-1'>
 					<div className='flex flex-row items-start justify-start gap-[0.75rem]'>
-						<div className='rounded-17xl [background:linear-gradient(rgba(255,_255,_255,_0.8),_rgba(255,_255,_255,_0.8)),_#ff9447] w-[2.25rem] h-[2.25rem] flex flex-row p-[0.63rem] box-border items-center justify-center'>
+						<div
+							className={`rounded-17xl w-[2.25rem] h-[2.25rem] flex flex-row p-[0.63rem] box-border items-center justify-center ${
+								index % 2 == 0
+									? '[background:linear-gradient(rgba(255,_255,_255,_0.8),_rgba(255,_255,_255,_0.8)),_#9747ff]'
+									: '[background:linear-gradient(rgba(255,_255,_255,_0.8),_rgba(255,_255,_255,_0.8)),_#ff9447]'
+							}`}>
 							{vet.vet_image}
 						</div>
 						<div className='flex flex-col items-start justify-start gap-[0.75rem]'>

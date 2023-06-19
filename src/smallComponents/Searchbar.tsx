@@ -1,9 +1,9 @@
 'use client';
 
+import { supabase } from '@/api/createClient';
 import { AppointmentsContext } from '@/context/EditCancelContext';
 import { LeftSideNavContext } from '@/context/LeftSidebarContext';
 import { ModalContext } from '@/context/ModalContext';
-import { TextField } from '@mui/material';
 import Image from 'next/image';
 import { FC, SetStateAction, useContext, useState } from 'react';
 
@@ -22,6 +22,24 @@ const Searchbar: FC<SearchbarProps> = ({}) => {
 
 	const { unFold } = useContext(LeftSideNavContext);
 
+	const fetchExistingAppts = async () => {
+		try {
+			const { data, error } = await supabase
+				.from('ShockwaveApptFormDetails')
+				.select('*');
+			// .eq('id', idOfExistingApptToEdit);
+
+			// setallAppointments(data);
+
+			console.log(data);
+			console.log('====================================');
+			console.log(error);
+			console.log('====================================');
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	return (
 		<>
 			<input
@@ -33,6 +51,7 @@ const Searchbar: FC<SearchbarProps> = ({}) => {
 				onClick={() => {
 					handleOpenModal();
 					handleOpenAppointments();
+					fetchExistingAppts();
 				}}
 				className={`flex-auto rounded-xl [background:linear-gradient(rgba(255,_255,_255,_0.7),_rgba(255,_255,_255,_0.7)),_#d8d3cc] flex flex-row py-[0.75rem] px-[1.25rem] items-start justify-between text-left text-[1rem] text-gray font-urbanist ${
 					unFold ? '' : ''
@@ -44,6 +63,7 @@ const Searchbar: FC<SearchbarProps> = ({}) => {
 				onClick={() => {
 					handleOpenModal();
 					handleOpenAppointments();
+					fetchExistingAppts();
 				}}>
 				<Image
 					alt='search-icon'

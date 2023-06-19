@@ -18,7 +18,7 @@ const ReschedBtn: FC<ReschedBtnProps> = ({}) => {
 			.from('ShockwaveApptFormDetails')
 			.select('*');
 
-		setallAppointments(data);
+		// setallAppointments(data);
 
 		console.log(data);
 	};

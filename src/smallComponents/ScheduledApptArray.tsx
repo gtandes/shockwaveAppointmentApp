@@ -92,7 +92,8 @@ interface ScheduledApptArrayProps {
 const ScheduledApptArray: FC<ScheduledApptArrayProps> = ({ onClose }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const { allAppointments, setallAppointments } = useContext(FormContext);
-	const { setidOfExistingApptToEdit } = useContext(AppointmentsContext);
+	const { idOfExistingApptToEdit, setidOfExistingApptToEdit } =
+		useContext(AppointmentsContext);
 	const { isReschedModalOpen, openReschedModal } =
 		useContext(ReschedModalContext);
 
@@ -112,13 +113,20 @@ const ScheduledApptArray: FC<ScheduledApptArrayProps> = ({ onClose }) => {
 	};
 
 	const fetchApptDetails = async () => {
-		const { data } = await supabase
-			.from('ShockwaveApptFormDetails')
-			.select('*');
+		try {
+			const { data, error } = await supabase
+				.from('ShockwaveApptFormDetails')
+				.select('*');
 
-		setallAppointments(data);
+			// setallAppointments(data);
 
-		console.log(data);
+			console.log(data);
+			console.log('====================================');
+			console.log(error);
+			console.log('====================================');
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	const deleteAppt = async (userId: any) => {
@@ -143,11 +151,24 @@ const ScheduledApptArray: FC<ScheduledApptArrayProps> = ({ onClose }) => {
 			{allAppointments.map((appt: ApptType, index: number) => (
 				<div
 					key={appt.id}
-					onClick={fetchApptDetails}
-					className={`mb-4 rounded-xl [background:linear-gradient(rgba(255,_255,_255,_0.9),_rgba(255,_255,_255,_0.9)),_#ff9447] box-border w-[525px] flex flex-row p-[1.25rem] items-center text-left text-[1rem] text-gray-gray-100 font-urbanist border-[1px] border-solid border-coral`}>
+					onClick={() => {
+						setidOfExistingApptToEdit(appt.id);
+						console.log(idOfExistingApptToEdit);
+						fetchApptDetails();
+					}}
+					className={`mb-4 rounded-xl box-border w-[525px] flex flex-row p-[1.25rem] items-center text-left text-[1rem] text-gray-gray-100 font-urbanist border-[1px] border-solid ${
+						index % 2 == 0
+							? 'border-blueviolet [background:linear-gradient(rgba(255,_255,_255,_0.8),_rgba(255,_255,_255,_0.8)),_#9747ff]'
+							: 'border-coral [background:linear-gradient(rgba(255,_255,_255,_0.9),_rgba(255,_255,_255,_0.9)),_#ff9447]'
+					}`}>
 					<div className='flex flex-row items-start justify-between flex-1'>
 						<div className='flex flex-row items-start justify-start gap-[0.75rem]'>
-							<div className='rounded-17xl [background:linear-gradient(rgba(255,_255,_255,_0.8),_rgba(255,_255,_255,_0.8)),_#ff9447] w-[2.25rem] h-[2.25rem] flex flex-row p-[0.63rem] box-border items-center justify-center'>
+							<div
+								className={`rounded-17xl  w-[2.25rem] h-[2.25rem] flex flex-row p-[0.63rem] box-border items-center justify-center ${
+									index % 2 == 0
+										? ' [background:linear-gradient(rgba(255,_255,_255,_0.8),_rgba(255,_255,_255,_0.8)),_#9747ff]'
+										: ' [[background:linear-gradient(rgba(255,_255,_255,_0.8),_rgba(255,_255,_255,_0.8)),_#ff9447]'
+								}`}>
 								<Image
 									width={20}
 									height={20}
@@ -211,6 +232,8 @@ const ScheduledApptArray: FC<ScheduledApptArrayProps> = ({ onClose }) => {
 									openReschedModal();
 									handleOpenModal();
 									setidOfExistingApptToEdit(appt.id);
+									console.log(idOfExistingApptToEdit);
+
 									handleClose();
 								}}>
 								Edit

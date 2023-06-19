@@ -92,6 +92,7 @@ const ReschedForm: FC<ReschedFormProps> = ({}) => {
 			updateSupabaseAppt();
 
 			toast.success('Appointment Booked!');
+			onClose();
 		}
 	};
 
@@ -139,8 +140,6 @@ const ReschedForm: FC<ReschedFormProps> = ({}) => {
 				})
 				.eq('id', idOfExistingApptToEdit);
 
-			fetchApptDetails();
-
 			console.log('====================================');
 			console.log(error);
 			console.log('====================================');
@@ -149,15 +148,27 @@ const ReschedForm: FC<ReschedFormProps> = ({}) => {
 		}
 	};
 
-	const fetchApptDetails = async () => {
-		const { data } = await supabase
-			.from('ShockwaveApptFormDetails')
-			.select('*');
+	const fetchApptByID = async () => {
+		try {
+			const { data, error } = await supabase
+				.from('ShockwaveApptFormDetails')
+				.select('*')
+				.eq('id', idOfExistingApptToEdit);
 
-		setallAppointments(data);
+			if (data) {
+				console.log(data);
+			}
+			console.log('====================================');
+			console.log(error);
+			console.log('====================================');
 
-		console.log(data);
+			return data;
+		} catch (error) {
+			console.log(error);
+		}
 	};
+
+	console.log(fetchApptByID());
 
 	const apptToEdit = allAppointments.filter(
 		(appt: ApptType) => appt.id === idOfExistingApptToEdit,

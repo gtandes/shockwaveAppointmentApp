@@ -56,7 +56,7 @@ const AppointmentPage: FC<AppointmentPageProps> = ({}) => {
 
 				<div className='absolute top-[7.25rem] left-[0rem] flex flex-row items-start justify-start'>
 					<div
-						className={`flex flex-col items-start
+						className={`relative flex flex-col items-start
              ${
 								unFold
 									? 'w-[1280px] justify-start'
