@@ -18,8 +18,6 @@ import { supabase } from '@/api/createClient';
 import { AppointmentsContext } from '@/context/EditCancelContext';
 import { ReschedModalContext } from '@/context/ReschedFormModalContext';
 import { ModalContext } from '@/context/ModalContext';
-import { NewApptBtnContext } from '@/context/NewApptBtnContext';
-import { CalendarContext } from '@/context/CalendarContext';
 
 export interface ApptType {
 	id: Key | null | undefined;
@@ -144,6 +142,7 @@ const ScheduledApptArray: FC<ScheduledApptArrayProps> = ({ onClose }) => {
 			{allAppointments.map((appt: ApptType, index: number) => (
 				<div
 					key={appt.id}
+					// id={appointmentID++}
 					onClick={() => {
 						setidOfExistingApptToEdit(appt.id);
 						console.log(idOfExistingApptToEdit);
@@ -237,7 +236,7 @@ const ScheduledApptArray: FC<ScheduledApptArrayProps> = ({ onClose }) => {
 							<MenuItem
 								onClick={() => {
 									handleClose();
-									deleteAppt(appt.id);
+									deleteAppt(idOfExistingApptToEdit);
 								}}>
 								Delete
 							</MenuItem>
