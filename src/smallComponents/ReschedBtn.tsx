@@ -22,6 +22,7 @@ const ReschedBtn: FC<ReschedBtnProps> = ({}) => {
 
 		console.log(data);
 	};
+
 	const handleClick = () => {
 		handleOpenModal();
 		handleOpenAppointments();

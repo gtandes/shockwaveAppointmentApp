@@ -17,6 +17,9 @@ import { FormContext } from '@/context/FormContext';
 import { supabase } from '@/api/createClient';
 import { AppointmentsContext } from '@/context/EditCancelContext';
 import { ReschedModalContext } from '@/context/ReschedFormModalContext';
+import { ModalContext } from '@/context/ModalContext';
+import { NewApptBtnContext } from '@/context/NewApptBtnContext';
+import { CalendarContext } from '@/context/CalendarContext';
 
 export interface ApptType {
 	id: Key | null | undefined;
@@ -89,9 +92,14 @@ interface ScheduledApptArrayProps {
 const ScheduledApptArray: FC<ScheduledApptArrayProps> = ({ onClose }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const { allAppointments, setallAppointments } = useContext(FormContext);
-	const { idOfExistingApptToEdit, setidOfExistingApptToEdit } =
-		useContext(AppointmentsContext);
-	const { openReschedModal } = useContext(ReschedModalContext);
+	const { setidOfExistingApptToEdit } = useContext(AppointmentsContext);
+	const { isReschedModalOpen, openReschedModal } =
+		useContext(ReschedModalContext);
+
+	const { openModal, handleOpenModal } = useContext(ModalContext);
+	const { isNewApptBtnClicked } = useContext(NewApptBtnContext);
+	const { isCalendarClicked } = useContext(CalendarContext);
+	const { openAppointments } = useContext(AppointmentsContext);
 
 	const open = Boolean(anchorEl);
 
@@ -132,7 +140,7 @@ const ScheduledApptArray: FC<ScheduledApptArrayProps> = ({ onClose }) => {
 
 	return (
 		<>
-			{allAppointments.map((appt: ApptType) => (
+			{allAppointments.map((appt: ApptType, index: number) => (
 				<div
 					key={appt.id}
 					onClick={fetchApptDetails}
@@ -200,10 +208,10 @@ const ScheduledApptArray: FC<ScheduledApptArrayProps> = ({ onClose }) => {
 							<MenuItem
 								onClick={() => {
 									onClose();
+									openReschedModal();
+									handleOpenModal();
 									setidOfExistingApptToEdit(appt.id);
 									handleClose();
-									openReschedModal();
-									// console.log(appt.id, idOfExistingApptToEdit);
 								}}>
 								Edit
 							</MenuItem>

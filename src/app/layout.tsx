@@ -27,14 +27,14 @@ export default function RootLayout({
 		<html lang='en' className={(cn('bg-white antialiased'), inter.className)}>
 			<body className='flex flex-col items-center justify-center min-h-screen antialiased'>
 				<ModalContextProvider>
-					<LeftSideNavContextProvider>
-						<RightSidebarContextProvider>
-							<NewApptBtnContextProvider>
-								<CalendarContextProvider>
-									<FormContextProvider>
-										<EditFormContextProvider>
-											<AppointmentsContextProvider>
-												<ReschedModalContextProvider>
+					<ReschedModalContextProvider>
+						<NewApptBtnContextProvider>
+							<AppointmentsContextProvider>
+								<FormContextProvider>
+									<EditFormContextProvider>
+										<CalendarContextProvider>
+											<LeftSideNavContextProvider>
+												<RightSidebarContextProvider>
 													<ToastContainer
 														position='top-center'
 														autoClose={2000}
@@ -47,14 +47,14 @@ export default function RootLayout({
 														pauseOnHover
 													/>
 													{children}
-												</ReschedModalContextProvider>
-											</AppointmentsContextProvider>
-										</EditFormContextProvider>
-									</FormContextProvider>
-								</CalendarContextProvider>
-							</NewApptBtnContextProvider>
-						</RightSidebarContextProvider>
-					</LeftSideNavContextProvider>
+												</RightSidebarContextProvider>
+											</LeftSideNavContextProvider>
+										</CalendarContextProvider>
+									</EditFormContextProvider>
+								</FormContextProvider>
+							</AppointmentsContextProvider>
+						</NewApptBtnContextProvider>
+					</ReschedModalContextProvider>
 				</ModalContextProvider>
 			</body>
 		</html>

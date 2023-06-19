@@ -9,6 +9,7 @@ export type ReschedModalContextProps = {
 	openReschedModal: () => setOpenReschedModal | void;
 	closeReschedModal: () => setOpenReschedModal | void;
 	isReschedModalOpen: open;
+	setOpenReschedModal: setOpenReschedModal;
 };
 
 export const ReschedModalContext = createContext<ReschedModalContextProps>(
@@ -28,7 +29,12 @@ export const ReschedModalContextProvider = ({
 
 	return (
 		<ReschedModalContext.Provider
-			value={{ openReschedModal, closeReschedModal, isReschedModalOpen }}>
+			value={{
+				openReschedModal,
+				closeReschedModal,
+				isReschedModalOpen,
+				setOpenReschedModal,
+			}}>
 			{children}
 		</ReschedModalContext.Provider>
 	);

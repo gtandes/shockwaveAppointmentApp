@@ -9,7 +9,7 @@ type setOpenAppointments = React.Dispatch<
 >;
 
 export type AppointmentsContextProps = {
-	handleCloseAppointments: () => void;
+	handleCloseAppointments: () => setOpenAppointments | void;
 	handleOpenAppointments: () => setOpenAppointments | void;
 	openAppointments: openAppointments;
 	idOfExistingApptToEdit: ApptType['id'];
@@ -31,6 +31,7 @@ export const AppointmentsContextProvider = ({
 }: AppointmentsContextProviderProps) => {
 	const [idOfExistingApptToEdit, setidOfExistingApptToEdit] =
 		useState<ApptType['id']>();
+
 	const [openAppointments, setOpenAppointments] = useState(false);
 	const handleOpenAppointments = () => setOpenAppointments(true);
 	const handleCloseAppointments = () => setOpenAppointments(false);

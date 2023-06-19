@@ -16,14 +16,14 @@ const EditCancelApptForm: FC<EditCancelApptFormProps> = ({}) => {
 	const { handleCloseNewAppt } = useContext(NewApptBtnContext);
 	const { handleCloseCalendar } = useContext(CalendarContext);
 	const { handleCloseAppointments } = useContext(AppointmentsContext);
-	// const { closeReschedModal } = useContext(ReschedModalContext);
+	const { closeReschedModal } = useContext(ReschedModalContext);
 
 	const onClose = () => {
 		handleCloseModal();
 		handleCloseNewAppt();
 		handleCloseCalendar();
 		handleCloseAppointments();
-		// closeReschedModal();
+		closeReschedModal();
 	};
 
 	return (

@@ -122,27 +122,31 @@ const ReschedForm: FC<ReschedFormProps> = ({}) => {
 	};
 
 	const updateSupabaseAppt = async () => {
-		const { error } = await supabase
-			.from('ShockwaveApptFormDetails')
-			.update({
-				name: editName,
-				petName: editPetName,
-				breed: editBreed,
-				age: editAge,
-				gender: editGender,
-				date: editDate,
-				time: editTime,
-				endTime: editEndTime,
-				service: editService,
-				vetDetails: editVetDetails,
-			})
-			.eq('id', idOfExistingApptToEdit);
+		try {
+			const { error } = await supabase
+				.from('ShockwaveApptFormDetails')
+				.update({
+					name: editName,
+					petName: editPetName,
+					breed: editBreed,
+					age: editAge,
+					gender: editGender,
+					date: editDate,
+					time: editTime,
+					endTime: editEndTime,
+					service: editService,
+					vetDetails: editVetDetails,
+				})
+				.eq('id', idOfExistingApptToEdit);
 
-		fetchApptDetails();
+			fetchApptDetails();
 
-		console.log('====================================');
-		console.log(error);
-		console.log('====================================');
+			console.log('====================================');
+			console.log(error);
+			console.log('====================================');
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	const fetchApptDetails = async () => {
