@@ -58,13 +58,17 @@ const RegForm2: FC<RegForm2Props> = ({}) => {
 	} = useContext(FormContext);
 
 	const fetchApptDetails = async () => {
-		const { data } = await supabase
-			.from('ShockwaveApptFormDetails')
-			.select('*');
+		try {
+			const { data } = await supabase
+				.from('ShockwaveApptFormDetails')
+				.select('*');
 
-		setallAppointments(data);
+			if (data) setallAppointments(data);
 
-		console.log(data);
+			console.log(allAppointments);
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	//convert img

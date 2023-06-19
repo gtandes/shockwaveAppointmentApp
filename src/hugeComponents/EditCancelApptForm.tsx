@@ -30,7 +30,7 @@ const EditCancelApptForm: FC<EditCancelApptFormProps> = ({}) => {
 		<div className='flex items-center justify-center h-screen'>
 			<div className='w-[650px] overflow-hidden bg-white rounded-lg shadow-lg font-urbanist py-6'>
 				<div className='flex flex-col items-center justify-center h-full w-[600px] px-5'>
-					<h2 className='mx-auto'>Existing Appointments</h2>
+					<h3>Existing appointments.</h3>
 					<ScheduledApptArray onClose={onClose} />
 				</div>
 			</div>

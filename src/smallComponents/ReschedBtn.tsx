@@ -11,16 +11,20 @@ interface ReschedBtnProps {}
 const ReschedBtn: FC<ReschedBtnProps> = ({}) => {
 	const { handleOpenAppointments } = useContext(AppointmentsContext);
 	const { handleOpenModal } = useContext(ModalContext);
-	const { setallAppointments } = useContext(FormContext);
+	const { allAppointments, setallAppointments } = useContext(FormContext);
 
 	const fetchApptDetails = async () => {
-		const { data } = await supabase
-			.from('ShockwaveApptFormDetails')
-			.select('*');
+		try {
+			const { data } = await supabase
+				.from('ShockwaveApptFormDetails')
+				.select('*');
 
-		// setallAppointments(data);
+			if (data) setallAppointments(data);
 
-		console.log(data);
+			console.log(allAppointments);
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	const handleClick = () => {

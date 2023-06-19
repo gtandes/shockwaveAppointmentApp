@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useContext, useState } from 'react';
+import { FC, useContext } from 'react';
 import { FormContext } from '@/context/FormContext';
 import VetCards from './VetCards';
 import { AppointmentsContext } from '@/context/EditCancelContext';
@@ -148,18 +148,18 @@ const ReschedForm: FC<ReschedFormProps> = ({}) => {
 		}
 	};
 
-	const fetchApptByID = async () => {
+	const fetchApptByID = async (id: any) => {
 		try {
-			const { data, error } = await supabase
+			const { data } = await supabase
 				.from('ShockwaveApptFormDetails')
 				.select('*')
-				.eq('id', idOfExistingApptToEdit);
+				.eq('id', id);
 
 			if (data) {
 				console.log(data);
 			}
 			console.log('====================================');
-			console.log(error);
+			console.log('this is fetch by ID', idOfExistingApptToEdit);
 			console.log('====================================');
 
 			return data;
@@ -168,11 +168,13 @@ const ReschedForm: FC<ReschedFormProps> = ({}) => {
 		}
 	};
 
-	console.log(fetchApptByID());
+	console.log(fetchApptByID(idOfExistingApptToEdit));
 
 	const apptToEdit = allAppointments.filter(
 		(appt: ApptType) => appt.id === idOfExistingApptToEdit,
 	);
+
+	// const apptToEdit = () => fetchApptByID();
 
 	return (
 		<div className='flex items-center justify-center h-screen'>

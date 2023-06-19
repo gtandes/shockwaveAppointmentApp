@@ -92,15 +92,11 @@ interface ScheduledApptArrayProps {
 const ScheduledApptArray: FC<ScheduledApptArrayProps> = ({ onClose }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const { allAppointments, setallAppointments } = useContext(FormContext);
+	const { openReschedModal } = useContext(ReschedModalContext);
 	const { idOfExistingApptToEdit, setidOfExistingApptToEdit } =
 		useContext(AppointmentsContext);
-	const { isReschedModalOpen, openReschedModal } =
-		useContext(ReschedModalContext);
 
-	const { openModal, handleOpenModal } = useContext(ModalContext);
-	const { isNewApptBtnClicked } = useContext(NewApptBtnContext);
-	const { isCalendarClicked } = useContext(CalendarContext);
-	const { openAppointments } = useContext(AppointmentsContext);
+	const { handleOpenModal } = useContext(ModalContext);
 
 	const open = Boolean(anchorEl);
 
@@ -114,16 +110,13 @@ const ScheduledApptArray: FC<ScheduledApptArrayProps> = ({ onClose }) => {
 
 	const fetchApptDetails = async () => {
 		try {
-			const { data, error } = await supabase
+			const { data } = await supabase
 				.from('ShockwaveApptFormDetails')
 				.select('*');
 
-			// setallAppointments(data);
+			if (data) setallAppointments(data);
 
-			console.log(data);
-			console.log('====================================');
-			console.log(error);
-			console.log('====================================');
+			console.log(allAppointments);
 		} catch (error) {
 			console.log(error);
 		}
@@ -222,7 +215,10 @@ const ScheduledApptArray: FC<ScheduledApptArrayProps> = ({ onClose }) => {
 							id='basic-menu'
 							anchorEl={anchorEl}
 							open={open}
-							onClose={handleClose}
+							onClose={() => {
+								handleClose();
+								// setidOfExistingApptToEdit(appt.id);
+							}}
 							MenuListProps={{
 								'aria-labelledby': 'basic-button',
 							}}>
@@ -231,7 +227,6 @@ const ScheduledApptArray: FC<ScheduledApptArrayProps> = ({ onClose }) => {
 									onClose();
 									openReschedModal();
 									handleOpenModal();
-									setidOfExistingApptToEdit(appt.id);
 									console.log(idOfExistingApptToEdit);
 
 									handleClose();
